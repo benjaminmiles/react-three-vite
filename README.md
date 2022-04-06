@@ -10,6 +10,7 @@ _A simple React Three Fiber + Vite starter with an import-ready CodeSandbox conf
 - [Drei](https://github.com/pmndrs/drei): React Three Fiber Helpers
 - [Three.js](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene): 3D Engine
 - [Vite](https://vitejs.dev/guide/): Static Web Server
+- [CodeSandbox](https://codesandbox.io/docs/configuration): Online Prototyping Container (optional)
 
 ### Installation
 

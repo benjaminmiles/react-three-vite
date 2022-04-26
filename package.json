@@ -1,6 +1,6 @@
 {
   "name": "react-three-vite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple React Three Fiber + Vite starter with an import-ready CodeSandbox config.",
   "keywords": [
     "r3f",

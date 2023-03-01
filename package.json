@@ -16,16 +16,16 @@
   "repository": "github:benjaminmiles/react-three-vite",
   "license": "MIT",
   "dependencies": {
-    "@react-three/drei": "9.56.25",
-    "@react-three/fiber": "8.11.2",
+    "@react-three/drei": "9.56.28",
+    "@react-three/fiber": "8.11.5",
     "gltfjsx": "^6.1.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "three": "0.149.0"
+    "three": "0.150.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.1.0",
-    "vite": "^4.1.1"
+    "vite": "^4.1.4"
   },
   "scripts": {
     "dev": "vite --host",

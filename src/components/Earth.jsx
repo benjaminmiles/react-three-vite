@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import Moon from "./Moon";
 
-const Earth = ({ earthPosition }) => {
+const Earth = ({ earthPosition, moonPosition }) => {
   const earthRef = useRef();
   const cloudsRef = useRef();
 
@@ -49,6 +50,7 @@ const Earth = ({ earthPosition }) => {
     <>
       <EarthSphere />
       <Clouds />
+      <Moon moonPosition={moonPosition} />
     </>
   );
 };

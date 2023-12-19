@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 html,
 body,
 #root {
@@ -8,6 +9,7 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  // background-color: black;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -16,9 +18,11 @@ body,
   user-select: none;
   overflow: hidden;
 }
+
 #root {
   overflow: auto;
 }
+
 body {
   position: fixed;
   overflow: hidden;
@@ -27,6 +31,7 @@ body {
   color: black;
   -webkit-font-smoothing: antialiased;
 }
+
 .Main {
   border: solid;
   height: 100%;
@@ -35,27 +40,28 @@ body {
   max-width: 900px;
   display: flex;
   flex-direction: row;
-}
-@media (max-width: 600px) {
-  .Main {
+
+  @media (max-width: 600px) {
     flex-direction: column;
   }
-}
-.Main #Canvas {
-  background-color: black;
-}
-.Main .settings-panel {
-  position: relative;
-  top: 0;
-  right: 0;
-  width: 300px;
-  height: 100%;
-  background-color: #333;
-  transition: width 0.3s ease;
-}
-.Main .settings-panel.expanded {
-  width: 300px;
-}
-.Main .settings-panel.collapsed {
-  width: 0px;
+
+  #Canvas {
+    background-color: black;
+  }
+
+  .settings-panel {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #333;
+    transition: width 0.3s ease;
+    &.expanded {
+      width: 300px;
+    }
+    &.collapsed {
+      width: 0px;
+    }
+  }
 }

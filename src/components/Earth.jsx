@@ -1,32 +1,59 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import Moon from "./Moon";
-import * as THREE from "three";
+import useStore from "../store/store";
 
 const Earth = ({ earthPosition }) => {
+  const { setEarthOrbitSettings, setMoonOrbitSettings } = useStore();
+
   const earthRef = useRef();
   const cloudsRef = useRef();
   const moonRef = useRef();
+  const earthOrbitSettingsRef = useRef(useStore.getState().earthOrbitSettings);
+  const moonOrbitSettingsRef = useRef(useStore.getState().moonOrbitSettings);
 
-  const moonOrbitRadius = 2; // Distance from the Earth
-  const moonOrbitSpeed = 0.2;
-  let moonAngle = 0;
+  // Subscribe to store updates
+  useEffect(() => {
+    const unsubscribeEarth = useStore.subscribe(
+      state => (earthOrbitSettingsRef.current = state.earthOrbitSettings),
+      state => state.earthOrbitSettings
+    );
+
+    const unsubscribeMoon = useStore.subscribe(
+      state => (moonOrbitSettingsRef.current = state.moonOrbitSettings),
+      state => state.moonOrbitSettings
+    );
+
+    return () => {
+      unsubscribeEarth();
+      unsubscribeMoon();
+    };
+  }, []);
 
   useFrame((state, delta) => {
-    earthRef.current.rotation.y += 0.04 * delta;
-    cloudsRef.current.rotation.y += 0.05 * delta;
+    // Update Earth's orbit
+    const earthSettings = earthOrbitSettingsRef.current;
+    const newEarthAngle = earthSettings.angle + earthSettings.speed * delta;
+    const earthX = earthSettings.radius * Math.cos(newEarthAngle);
+    const earthZ = earthSettings.radius * Math.sin(newEarthAngle);
+    earthRef.current.position.set(earthX, 0, earthZ);
+    cloudsRef.current.position.set(earthX, 0, earthZ);
+    setEarthOrbitSettings({ ...earthSettings, angle: newEarthAngle });
 
-    // Update the moons posotion
-    moonAngle -= moonOrbitSpeed * delta;
-    const moonX = earthPosition[0] + moonOrbitRadius * Math.cos(moonAngle);
-    const moonZ = earthPosition[2] + moonOrbitRadius * Math.sin(moonAngle);
+    // Update Moon's orbit
+    const moonSettings = moonOrbitSettingsRef.current;
+    const newMoonAngle = moonSettings.angle + moonSettings.speed * delta;
+    const moonX = earthX + moonSettings.radius * Math.cos(newMoonAngle);
+    const moonZ = earthZ + moonSettings.radius * Math.sin(newMoonAngle);
 
     if (moonRef.current) {
-      moonRef.current.position.set(moonX, earthPosition[1], moonZ);
-      moonRef.current.rotation.y = moonAngle;
+      moonRef.current.position.set(moonX, 0, moonZ);
+      moonRef.current.rotation.y = newMoonAngle;
     }
+    setMoonOrbitSettings({ ...moonSettings, angle: newMoonAngle });
   });
+
   const EarthSphere = () => {
     const [earthTexture, normalTexture, specularTexture] = useTexture([
       "/assets/earth/2k_earth_daymap.jpg",

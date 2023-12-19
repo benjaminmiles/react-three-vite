@@ -13,7 +13,7 @@ const Scene = () => {
       <pointLight color='#f6f3ea' intensity={1.2} position={[0, 0, 0]} />
       <Earth earthPosition={earthPosition} moonPosition={moonPosition} />
       <Sun position={[0, 0, 0]} />
-      <Stars radius={300} depth={60} count={20000} factor={7} saturation={0} fade speed={0.5} />
+      <Stars radius={300} depth={60} count={20000} factor={7} saturation={0} fade speed={1} />
     </>
   );
 };

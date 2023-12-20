@@ -2,17 +2,17 @@ import React, { useRef, forwardRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import OrbitPath from "./OrbitPath";
 import planetsData from "../data/planetsData";
+import useStore from "../store/store";
 
 // default values
 const defaultBodyData = planetsData.test;
 
 // scale down data for our model
 const distanceScaleFactor = 0.0000001;
-const sizeScaleFactor = 0.001;
+const sizeScaleFactor = 0.00015;
 const speedScaleFactor = 0.01;
 
 const Planet = forwardRef(({ bodyData }, ref) => {
-  console.log(defaultBodyData);
   const localRef = ref || useRef();
   const mergedData = { ...defaultBodyData, ...bodyData };
   const {
@@ -36,25 +36,24 @@ const Planet = forwardRef(({ bodyData }, ref) => {
   const scaledOrbitalSpeed = orbitalSpeed * speedScaleFactor;
 
   useFrame((state, delta) => {
-    // Simplified orbital mechanics
+    // Orbit animation
     const angle = (state.clock.getElapsedTime() * scaledOrbitalSpeed) / scaledOrbitalRadius;
     const x = scaledOrbitalRadius * Math.cos(angle);
     const z = scaledOrbitalRadius * Math.sin(angle);
 
     if (localRef.current) {
       localRef.current.position.set(x, 0, z);
-      // Add rotation logic here if needed
+      // add rotation later
     }
   });
-  console.log({ scaledRadius });
-  console.log(localRef.current);
+
   return (
     <>
       <mesh ref={localRef}>
-        <sphereGeometry args={[2, 32, 32]} />
+        <sphereGeometry args={[scaledRadius, 32, 32]} />
         <meshStandardMaterial color={color} />
       </mesh>
-      <OrbitPath origin={orbitalOrigin} radius={scaledOrbitalRadius} color='silver' />
+      <OrbitPath origin={orbitalOrigin} radius={scaledOrbitalRadius} color={color} name={name} />
     </>
   );
 });

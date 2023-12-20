@@ -11,7 +11,7 @@ const Scene = () => {
 
   return (
     <>
-      <ambientLight intensity={1} />
+      <ambientLight intensity={0.2} />
       <pointLight color='#f6f3ea' intensity={1.2} position={[0, 0, 0]} />
       <Planet bodyData={planetsData.Earth} />
       <Planet bodyData={planetsData.Moon} />

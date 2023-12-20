@@ -44,18 +44,54 @@ body {
 .Main #Canvas {
   background-color: black;
 }
-.Main .settings-panel {
+.Main .menu-con {
   position: relative;
   top: 0;
   right: 0;
   width: 300px;
   height: 100%;
   background-color: #333;
-  transition: width 0.3s ease;
+  color: white;
 }
-.Main .settings-panel.expanded {
+.Main .menu-con.open {
   width: 300px;
 }
-.Main .settings-panel.collapsed {
-  width: 0px;
+@media (max-width: 600px) {
+  .Main .menu-con.open {
+    width: 100%;
+    height: 300px;
+  }
+}
+.Main .menu-con.close {
+  width: 0;
+  height: 0;
+}
+.Main .menu-con.close .menu-content {
+  opacity: 0;
+}
+.Main .menu-con .menu-content {
+  padding-top: 40px;
+}
+.Main .menu-con .menu-content {
+  display: flex;
+}
+.Main .menu-con .menu-content .menu-item {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.Main .menu-con .menu-content .menu-item label {
+  flex: 1 1;
+}
+.Main .menu-con .menu-content .menu-item input {
+  width: 60px;
+}
+.Main .menu-con .menu-toggle-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
 }

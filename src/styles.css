@@ -35,6 +35,7 @@ body {
   max-width: 900px;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 }
 @media (max-width: 600px) {
   .Main {

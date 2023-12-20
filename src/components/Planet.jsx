@@ -39,21 +39,21 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
   const scaledOrbitalSpeed = orbitalSpeed * simSpeed;
   let rotationSpeed = rotationPeriod ? (2 * Math.PI) / (rotationPeriod * 3600) : 0;
   rotationSpeed *= rotationSpeedScaleFactor;
-  const [rotationCount, setRotationCount] = useState(0);
-  const lastRotationRef = useRef(0);
+  // const [rotationCount, setRotationCount] = useState(0);
+  // const lastRotationRef = useRef(0);
   // console.log({ name, numberOfRotationsPerOrbit });
   useFrame((state, delta) => {
     // Orbit animation
     const angle = (state.clock.getElapsedTime() * scaledOrbitalSpeed) / scaledOrbitalRadius;
     const x = scaledOrbitalRadius * Math.cos(angle);
     const z = scaledOrbitalRadius * Math.sin(angle);
-    const currentRotation = angle * numberOfRotationsPerOrbit;
+    // const currentRotation = angle * numberOfRotationsPerOrbit;
 
     if (localRef.current) {
       localRef.current.position.set(x, 0, z);
 
       // Calculate rotation based on the orbital angle
-      localRef.current.rotation.y = angle * numberOfRotationsPerOrbit;
+      // localRef.current.rotation.y = angle * numberOfRotationsPerOrbit;
     }
     // if (name === "Moon") {
     //   // Check if a full rotation is completed

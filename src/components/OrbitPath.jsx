@@ -3,7 +3,7 @@ import { Line } from "@react-three/drei";
 import * as THREE from "three";
 
 const OrbitPath = ({ origin = new THREE.Vector3(0, 0, 0), radius = 2, color = "white", name = "orbit-path" }) => {
-  console.log("OrbitPath origin and radius:", name, origin, radius);
+  // console.log("OrbitPath:", name, origin, radius);
 
   const points = useMemo(() => {
     const orbitPoints = [];

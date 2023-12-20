@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import * as THREE from 'three';
 
 const useStore = create((set, get) => ({
+    simSpeed: .01,
+    setSimSpeed: (newSpeed) => set({ simSpeed: newSpeed }),
+
     sunSettings: {
         position: new THREE.Vector3(0, 0, 0),
     },

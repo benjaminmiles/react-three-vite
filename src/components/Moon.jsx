@@ -1,4 +1,3 @@
-import { useTexture } from "@react-three/drei";
 import React, { forwardRef } from "react";
 
 const Moon = forwardRef((props, ref) => {

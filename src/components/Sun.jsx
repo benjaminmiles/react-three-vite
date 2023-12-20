@@ -4,7 +4,7 @@ const Sun = props => {
   return (
     <mesh {...props}>
       <sphereGeometry args={[3, 64, 64]} />
-      <meshBasicMaterial color={[10, 4, 0]} toneMapped={false} />
+      <meshBasicMaterial color={[10, 3, 0]} toneMapped={false} />
     </mesh>
   );
 };

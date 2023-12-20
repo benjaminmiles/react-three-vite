@@ -1,22 +1,28 @@
-// store.js
 import { create } from 'zustand';
+import * as THREE from 'three';
 
-const useStore = create(set => ({
-    earthOrbitSettings: {
+const useStore = create((set, get) => ({
+    sunSettings: {
+        position: new THREE.Vector3(0, 0, 0),
+    },
+
+    earthSettings: {
         radius: 10,
-        speed: -0.01,
+        speed: -0.5,
         angle: 0,
+        position: new THREE.Vector3(10, 0, 0),
     },
-    setEarthOrbitSettings: newSettings =>
-        set(state => ({ earthOrbitSettings: { ...state.earthOrbitSettings, ...newSettings } })),
+    setEarthOrbit: newSettings =>
+        set(state => ({ earthSettings: { ...state.earthSettings, ...newSettings } })),
 
-    moonOrbitSettings: {
-        radius: 2,
-        speed: -0.2,
-        angle: 0,
+    moonSettings: {
+        orbitRadius: 2,
+        speed: -6,
+        angle: 10,
+        position: new THREE.Vector3(13, 0, 0)
     },
-    setMoonOrbitSettings: newSettings =>
-        set(state => ({ moonOrbitSettings: { ...state.moonOrbitSettings, ...newSettings } })),
+    setMoonOrbit: newSettings =>
+        set(state => ({ moonSettings: { ...state.moonSettings, ...newSettings } })),
 }));
 
 export default useStore;

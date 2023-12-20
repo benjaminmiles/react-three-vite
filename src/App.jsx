@@ -14,9 +14,9 @@ const App = () => {
 
   return (
     <div className='Main'>
-      <Canvas id='Canvas' camera={{ fov: 50, position: [0, 30, 0] }}>
+      <Canvas id='Canvas' camera={{ fov: 50, position: [0, 40, 0], near: 0.1, far: 2000 }}>
         <Perf deepAnalyze />
-        <OrbitControls minDistance={3} maxDistance={200} />
+        <OrbitControls minDistance={5} maxDistance={980} zoomSpeed={0.2} dampingFactor={1.2} />
         <Suspense fallback={null}>
           <Scene />
         </Suspense>

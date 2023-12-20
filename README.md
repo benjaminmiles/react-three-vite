@@ -1,4 +1,4 @@
-# Solar System Simulation with React Three Fiber and Vite
+# Solar System Simulation
 
 _Explore the solar system in 3D with this interactive simulation built using React Three Fiber and Vite. This project includes a CodeSandbox configuration for easy online prototyping._
 
@@ -19,12 +19,13 @@ npm run sandbox
 
 ### TODOS
 
-[] add labels to planets
-[] add onclick to planets
-[] angle orbit paths
-[] add visualization of rotations to planets
-[] save planet positions to state
-[] add gravitational force
-[] change orbital path to trails
-[] allow user to adjust the moons orbital radius
-[] incoperate NASA API
+### Future Enhancements
+
+- [ ] Add labels to planets
+- [ ] Implement onclick interactions for detailed planet information
+- [ ] Angle orbit paths to reflect real orbital inclinations
+- [ ] Save and manage planet positions
+- [ ] Integrate gravitational force
+- [ ] Change orbital paths to dynamic trails
+- [ ] Allow users to adjust the Moon's orbital radius
+- [ ] Incorporate data from the NASA API

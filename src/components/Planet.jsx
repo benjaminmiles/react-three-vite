@@ -13,6 +13,7 @@ const sizeScaleFactor = 0.00015;
 const speedScaleFactor = 0.01;
 
 const Planet = forwardRef(({ bodyData }, ref) => {
+  const { simSpeed } = useStore();
   const localRef = ref || useRef();
   const mergedData = { ...defaultBodyData, ...bodyData };
   const {
@@ -33,7 +34,7 @@ const Planet = forwardRef(({ bodyData }, ref) => {
 
   const scaledOrbitalRadius = orbitalRadius * distanceScaleFactor;
   const scaledRadius = radius * sizeScaleFactor;
-  const scaledOrbitalSpeed = orbitalSpeed * speedScaleFactor;
+  const scaledOrbitalSpeed = orbitalSpeed * simSpeed;
 
   useFrame((state, delta) => {
     // Orbit animation

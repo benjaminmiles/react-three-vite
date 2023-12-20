@@ -4,9 +4,10 @@ import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import Scene from "./Scene";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
+import Menu from "./components/Menu";
 
 const App = () => {
-  const [isPanelExpanded, setIsPanelExpanded] = useState(true);
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
 
   const togglePanel = () => {
     setIsPanelExpanded(!isPanelExpanded);
@@ -15,7 +16,7 @@ const App = () => {
   return (
     <div className='Main'>
       <Canvas id='Canvas' camera={{ fov: 50, position: [0, 40, 0], near: 0.1, far: 2000 }}>
-        <Perf deepAnalyze />
+        {/* <Perf deepAnalyze /> */}
         <OrbitControls minDistance={5} maxDistance={980} zoomSpeed={0.2} dampingFactor={1.2} />
         <Suspense fallback={null}>
           <Scene />
@@ -28,7 +29,7 @@ const App = () => {
         <button onClick={togglePanel} className='menu-btn'>
           {isPanelExpanded ? "close" : "open"}
         </button>
-        {isPanelExpanded && <div>Menu</div>}
+        {isPanelExpanded && <Menu />}
       </div>
     </div>
   );

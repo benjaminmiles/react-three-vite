@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import OrbitPath from "./OrbitPath";
 import planetsData from "../data/planetsData";
 import useStore from "../store/store";
-
+import { usePlanetStore } from "../store/store";
 // default values
 const defaultBodyData = planetsData.Earth;
 
@@ -14,7 +14,9 @@ const rotationSpeedScaleFactor = 600000;
 // const speedScaleFactor = 0.01;
 
 const Planet = forwardRef(({ bodyData, textures }, ref) => {
-  const { simSpeed, setEarthPosition } = useStore();
+  const { simSpeed, setCameraTarget } = useStore();
+  const { updatePlanetAngle, planetAngles } = usePlanetStore();
+
   const localRef = ref || useRef();
   const mergedData = { ...defaultBodyData, ...bodyData };
   const {
@@ -41,38 +43,35 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
   rotationSpeed *= rotationSpeedScaleFactor;
   // const [rotationCount, setRotationCount] = useState(0);
   // const lastRotationRef = useRef(0);
-  // console.log({ name, numberOfRotationsPerOrbit });
-  // console.log({ name, radius, orbitalRadius, orbitalSpeed });
-  // console.log({ name, scaledOrbitalRadius, scaledRadius, scaledOrbitalSpeed });
+  const localAngleRef = useRef(planetAngles[name] || 0); // Initialize with saved angle or 0
+
   useFrame((state, delta) => {
-    // Orbit animation
-    const angle = (state.clock.getElapsedTime() * scaledOrbitalSpeed) / scaledOrbitalRadius;
-    const x = scaledOrbitalRadius * Math.cos(angle);
-    const z = scaledOrbitalRadius * Math.sin(angle);
-    // const currentRotation = angle * numberOfRotationsPerOrbit;
+    localAngleRef.current += (delta * scaledOrbitalSpeed * simSpeed) / scaledOrbitalRadius;
+    updatePlanetAngle(name, localAngleRef.current);
+
+    // Calculate position from angle
+    const x = scaledOrbitalRadius * Math.cos(localAngleRef.current);
+    const z = scaledOrbitalRadius * Math.sin(localAngleRef.current);
 
     if (localRef.current) {
       localRef.current.position.set(x, 0, z);
-
-      // Calculate rotation based on the orbital angle
-      // localRef.current.rotation.y = angle * numberOfRotationsPerOrbit;
     }
-    if (bodyData.name === "Earth" && localRef.current) {
-      setEarthPosition(localRef.current.position);
-    }
-    // if (name === "Moon") {
-    //   // Check if a full rotation is completed
-    //   if (Math.floor(currentRotation / (2 * Math.PI)) > lastRotationRef.current) {
-    //     lastRotationRef.current = Math.floor(currentRotation / (2 * Math.PI));
-    //     setRotationCount(lastRotationRef.current);
-    //     console.log(`${name} completed rotations: ${rotationCount}`);
-    //   }
-    // }
   });
+
+  const handleClick = e => {
+    // Log the click
+    e.stopPropagation();
+    console.log("clicked:", name);
+
+    // Update the camera's target to focus on the clicked planet
+    // Assuming you have a method in your store or context to update the camera
+    // For example, setCameraTarget could be a method in your Zustand store
+    setCameraTarget(localRef.current.position);
+  };
 
   return (
     <>
-      <group ref={localRef}>
+      <group ref={localRef} onClick={handleClick}>
         <mesh>
           <sphereGeometry args={[scaledRadius, 32, 32]} />
           {textures ? <meshStandardMaterial map={textures.map} /* other texture properties */ /> : <meshStandardMaterial color={color} />}

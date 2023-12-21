@@ -28,6 +28,29 @@ const useStore = create((set, get) => ({
     // },
     setMoonOrbit: newSettings =>
         set(state => ({ moonSettings: { ...state.moonSettings, ...newSettings } })),
+
+
+    cameraTarget: new THREE.Vector3(0, 0, 0),
+    setCameraTarget: (target) => set({ cameraTarget: target }),
 }));
 
 export default useStore;
+
+
+const usePlanetStore = create((set) => ({
+    planetPositions: {},
+    updatePlanetPosition: (name, position) =>
+        set((state) => ({
+            planetPositions: { ...state.planetPositions, [name]: position },
+        })),
+
+
+    planetAngles: {},
+    updatePlanetAngle: (name, angle) =>
+        set((state) => ({
+            planetAngles: { ...state.planetAngles, [name]: angle },
+        })),
+
+}));
+
+export { usePlanetStore }

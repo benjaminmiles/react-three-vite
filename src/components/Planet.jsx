@@ -31,19 +31,20 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
     gravity,
   } = mergedData;
   const { simSpeed, setCameraTarget } = useStore();
-  const { updatePlanetAngle, planetAngles, planetPositions, updatePlanetPosition } = usePlanetStore();
+  const { updatePlanetAngle, planetAngles, planetPositions, updatePlanetPosition, selectedPlanet, setSelectedPlanet } = usePlanetStore();
 
   const localRef = ref || useRef();
   const localAngleRef = useRef(planetAngles[name] || 0); // Initialize with saved angle or 0
 
+  // calculating scaled values
   const numberOfRotationsPerOrbit = rotationPeriod ? (orbitalPeriod * 24) / rotationPeriod : 0;
   const scaledOrbitalRadius = orbitalRadius * distanceScaleFactor;
   const scaledRadius = radius * sizeScaleFactor;
   const scaledOrbitalSpeed = orbitalSpeed * simSpeed;
   let rotationSpeed = rotationPeriod ? (2 * Math.PI) / (rotationPeriod * 3600) : 0;
   rotationSpeed *= rotationSpeedScaleFactor;
-  // const [rotationCount, setRotationCount] = useState(0);
-  // const lastRotationRef = useRef(0);
+
+  const isPlanetSelected = selectedPlanet && selectedPlanet.name === name; // clicked planet
 
   useFrame((state, delta) => {
     localAngleRef.current += (delta * scaledOrbitalSpeed * simSpeed) / scaledOrbitalRadius;
@@ -63,9 +64,16 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
     e.stopPropagation();
     console.log("clicked:", name);
 
+    // Update the selectedPlanet state
+    if (selectedPlanet && selectedPlanet.name === name) {
+      // Deselect if the same planet is clicked again
+      setSelectedPlanet(null);
+    } else {
+      // Select the new planet
+      setSelectedPlanet(mergedData);
+    }
+
     // Update the camera's target to focus on the clicked planet
-    // Assuming you have a method in your store or context to update the camera
-    // For example, setCameraTarget could be a method in your Zustand store
     setCameraTarget(localRef.current.position);
   };
 
@@ -74,7 +82,9 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
       <group ref={localRef} onClick={handleClick}>
         <mesh>
           <sphereGeometry args={[scaledRadius, 32, 32]} />
-          {textures ? <meshStandardMaterial map={textures.map} /* other texture properties */ /> : <meshStandardMaterial color={color} />}
+          {isPlanetSelected ? <meshStandardMaterial color={[20, 3, 0]} toneMapped={false} /> : <meshStandardMaterial color={color} />}
+          {/* {isPlanetSelected &&
+          } */}
         </mesh>
       </group>
       <OrbitPath origin={orbitalOrigin} radius={scaledOrbitalRadius} color={color} name={name} />

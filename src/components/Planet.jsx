@@ -2,8 +2,8 @@ import React, { useRef, forwardRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import OrbitPath from "./OrbitPath";
 import planetsData from "../data/planetsData";
-import useStore from "../store/store";
-import { usePlanetStore } from "../store/store";
+import useStore, { usePlanetStore } from "../store/store";
+
 // default values
 const defaultBodyData = planetsData.Earth;
 
@@ -14,10 +14,6 @@ const rotationSpeedScaleFactor = 600000;
 // const speedScaleFactor = 0.01;
 
 const Planet = forwardRef(({ bodyData, textures }, ref) => {
-  const { simSpeed, setCameraTarget } = useStore();
-  const { updatePlanetAngle, planetAngles } = usePlanetStore();
-
-  const localRef = ref || useRef();
   const mergedData = { ...defaultBodyData, ...bodyData };
   const {
     name,
@@ -34,6 +30,11 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
     color,
     gravity,
   } = mergedData;
+  const { simSpeed, setCameraTarget } = useStore();
+  const { updatePlanetAngle, planetAngles, planetPositions, updatePlanetPosition } = usePlanetStore();
+
+  const localRef = ref || useRef();
+  const localAngleRef = useRef(planetAngles[name] || 0); // Initialize with saved angle or 0
 
   const numberOfRotationsPerOrbit = rotationPeriod ? (orbitalPeriod * 24) / rotationPeriod : 0;
   const scaledOrbitalRadius = orbitalRadius * distanceScaleFactor;
@@ -43,7 +44,6 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
   rotationSpeed *= rotationSpeedScaleFactor;
   // const [rotationCount, setRotationCount] = useState(0);
   // const lastRotationRef = useRef(0);
-  const localAngleRef = useRef(planetAngles[name] || 0); // Initialize with saved angle or 0
 
   useFrame((state, delta) => {
     localAngleRef.current += (delta * scaledOrbitalSpeed * simSpeed) / scaledOrbitalRadius;
@@ -55,11 +55,11 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
 
     if (localRef.current) {
       localRef.current.position.set(x, 0, z);
+      updatePlanetPosition(name, { x, y: 0, z }); // Updating position in the state
     }
   });
 
   const handleClick = e => {
-    // Log the click
     e.stopPropagation();
     console.log("clicked:", name);
 

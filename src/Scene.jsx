@@ -1,14 +1,17 @@
-import React from "react";
-import Sun from "./components/Sun";
+import React, { useEffect } from "react";
 import { Stars } from "@react-three/drei";
 import useStore, { usePlanetStore } from "./store/store";
 import planetsData from "./data/planetsData";
 import Planet from "./components/Planet";
 import Moon from "./components/Moon";
+import Sun from "./components/Sun";
+import { useThree } from "@react-three/fiber";
+import CameraController from "./components/CameraControls";
 
 const Scene = () => {
   const { sunSettings } = useStore();
   const { planetPositions } = usePlanetStore();
+
   // const earthTextures = useTexture({
   //   map: "/assets/earth/2k_earth_daymap.jpg",
   //   normal: "/assets/earth/2k_earth_normal_map.png",
@@ -23,6 +26,7 @@ const Scene = () => {
   // console.log(planetPositions);
   return (
     <>
+      <CameraController />
       <ambientLight intensity={0.2} />
       <pointLight color='#f6f3ea' intensity={1.2} position={[0, 0, 0]} />
       <Planet bodyData={planetsData.Earth} />

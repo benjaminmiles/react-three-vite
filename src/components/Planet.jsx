@@ -1,9 +1,9 @@
 import React, { useRef, forwardRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import OrbitPath from "./OrbitPath";
 import planetsData from "../data/planetsData";
 import useStore, { usePlanetStore } from "../store/store";
-
+import * as THREE from "three";
 // default values
 const defaultBodyData = planetsData.Earth;
 
@@ -30,7 +30,7 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
     color,
     gravity,
   } = mergedData;
-  const { simSpeed, setCameraTarget } = useStore();
+  const { simSpeed, resetCamera } = useStore();
   const { updatePlanetAngle, planetAngles, planetPositions, updatePlanetPosition, selectedPlanet, setSelectedPlanet } = usePlanetStore();
 
   const localRef = ref || useRef();
@@ -46,6 +46,9 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
 
   const isPlanetSelected = selectedPlanet && selectedPlanet.name === name; // clicked planet
 
+  const { camera } = useThree();
+  const cameraOffset = new THREE.Vector3(0, 5, -10); // Adjust as needed
+
   useFrame((state, delta) => {
     localAngleRef.current += (delta * scaledOrbitalSpeed * simSpeed) / scaledOrbitalRadius;
     updatePlanetAngle(name, localAngleRef.current);
@@ -56,25 +59,25 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
 
     if (localRef.current) {
       localRef.current.position.set(x, 0, z);
-      updatePlanetPosition(name, { x, y: 0, z }); // Updating position in the state
+      updatePlanetPosition(name, { x, y: 0, z });
+    }
+    if (isPlanetSelected) {
+      const targetPosition = localRef.current.position.clone().add(cameraOffset);
+      camera.position.lerp(targetPosition, 0.1); // Smoothly move the camera to the target position
+      camera.lookAt(localRef.current.position); // Make the camera look at the planet
     }
   });
 
   const handleClick = e => {
     e.stopPropagation();
-    console.log("clicked:", name);
 
-    // Update the selectedPlanet state
     if (selectedPlanet && selectedPlanet.name === name) {
-      // Deselect if the same planet is clicked again
       setSelectedPlanet(null);
+      resetCamera();
     } else {
-      // Select the new planet
-      setSelectedPlanet(mergedData);
+      setSelectedPlanet(mergedData); // Assuming mergedData has the necessary planet info
+      // No need to manually call setCameraTarget here, as it's handled in CameraControls useEffect
     }
-
-    // Update the camera's target to focus on the clicked planet
-    setCameraTarget(localRef.current.position);
   };
 
   return (

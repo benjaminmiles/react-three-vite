@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import * as THREE from 'three';
 
 const useStore = create((set, get) => ({
-    simSpeed: .1,
+    simSpeed: .2,
     setSimSpeed: (newSpeed) => set({ simSpeed: newSpeed }),
 
     sunSettings: {
@@ -18,8 +18,29 @@ const useStore = create((set, get) => ({
         set(state => ({ moonSettings: { ...state.moonSettings, ...newSettings } })),
 
 
-    cameraTarget: new THREE.Vector3(0, 0, 0),
-    setCameraTarget: (target) => set({ cameraTarget: target }),
+    // cameraTarget: new THREE.Vector3(0, 0, 0),
+
+    camera: new THREE.PerspectiveCamera(),
+    orbitControls: null,
+    previousCameraPosition: new THREE.Vector3(),
+    previousCameraTarget: new THREE.Vector3(),
+    setOrbitControls: (controls) => set({ orbitControls: controls }),
+
+    setCameraTarget: (position) => {
+        const { orbitControls } = get();
+        if (orbitControls) {
+            orbitControls.target.copy(position);
+            orbitControls.update();
+        }
+    },
+
+    resetCamera: () => {
+        const { orbitControls } = get();
+        if (orbitControls) {
+            orbitControls.target.set(0, 0, 0); // Assuming the sun is at the origin
+            orbitControls.update();
+        }
+    },
 }));
 
 export default useStore;

@@ -82,7 +82,7 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
       <group ref={localRef} onClick={handleClick}>
         <mesh>
           <sphereGeometry args={[scaledRadius, 32, 32]} />
-          {isPlanetSelected ? <meshStandardMaterial color={[20, 3, 0]} toneMapped={false} /> : <meshStandardMaterial color={color} />}
+          {textures ? <meshStandardMaterial map={textures.map} /> : <meshStandardMaterial color={color} />}
           {/* {isPlanetSelected &&
           } */}
         </mesh>

@@ -1,7 +1,7 @@
 import React, { useRef, forwardRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import useStore from "../store/store";
-// import OrbitPath from "./OrbitPath";
+import useStore, { usePlanetStore } from "../store/store";
+import OrbitPath from "./OrbitPath";
 
 // scale down data for our model
 const distanceScaleFactor = 0.000005;
@@ -10,8 +10,9 @@ const rotationSpeedScaleFactor = 600000;
 
 const Moon = forwardRef(({ bodyData, parentPosition }, ref) => {
   const { simSpeed } = useStore();
-
+  // console.log(planetAngles);
   const localRef = ref || useRef();
+  const localAngleRef = useRef(0);
   // const pathRef = useRef();
 
   const { name, orbitalRadius, radius, color, orbitalSpeed } = bodyData;
@@ -21,10 +22,12 @@ const Moon = forwardRef(({ bodyData, parentPosition }, ref) => {
   const scaledRadius = radius * sizeScaleFactor;
   const scaledOrbitalSpeed = orbitalSpeed * simSpeed;
 
-  useFrame(state => {
-    const angle = state.clock.getElapsedTime() * scaledOrbitalSpeed;
-    const moonX = parentPosition.x + scaledOrbitalRadius * Math.cos(angle);
-    const moonZ = parentPosition.z + scaledOrbitalRadius * Math.sin(angle);
+  useFrame((state, delta) => {
+    localAngleRef.current += (delta * scaledOrbitalSpeed) / scaledOrbitalRadius;
+
+    // Calculate Moon's position relative to Earth
+    const moonX = parentPosition.x + scaledOrbitalRadius * Math.cos(localAngleRef.current);
+    const moonZ = parentPosition.z + scaledOrbitalRadius * Math.sin(localAngleRef.current);
 
     if (localRef.current) {
       localRef.current.position.set(moonX, 0, moonZ);

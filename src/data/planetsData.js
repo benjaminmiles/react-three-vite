@@ -54,15 +54,15 @@ const moonData = {
     name: "Moon",
     mass: 7.342e22, // in kilograms
     radius: 1737.4, // in kilometers
-    orbitalOrigin: new THREE.Vector3(13, 0, 0), // Assuming Earth's position is stored in earthData
-    orbitalRadius: 384400, // in kilometers (average distance to Earth)
+    orbitalOrigin: new THREE.Vector3(10, 0, 0), // Assuming Earth's position is stored in earthData
+    orbitalRadius: 3.84e5, // in kilometers (average distance to Earth)
     orbitalSpeed: 1.022, // in kilometers per second
     orbitalPeriod: 27.3, // in Earth days (sidereal period)
     orbitalInclination: 5.14, // in degrees (to the ecliptic)
     axialTilt: 1.54, // in degrees
     rotationPeriod: 655.7, // in hours (same as its orbital period, hence the same side always faces Earth)
     surfaceTemp: -53, // in Celsius (average)
-    color: "#808080",
+    color: "silver",
     gravity: 1.62, // in m/s²
 };
 

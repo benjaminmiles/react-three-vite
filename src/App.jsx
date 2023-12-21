@@ -9,10 +9,10 @@ import Menu from "./components/Menu";
 const App = () => {
   return (
     <div className='Main'>
-      <Canvas id='Canvas' camera={{ fov: 55, position: [0, 40, 0], near: 0.1, far: 2000 }}>
-        <Perf deepAnalyze />
+      <Canvas id='Canvas' dpr={[1, 2]} camera={{ fov: 60, position: [30, 22, 30], near: 0.1, far: 2000 }}>
+        {/* <Perf deepAnalyze /> */}
         <OrbitControls minDistance={5} maxDistance={980} zoomSpeed={0.2} dampingFactor={1.2} />
-        <Suspense fallback={null}>
+        <Suspense fallback={<div>Loading...</div>}>
           <Scene />
         </Suspense>
         <EffectComposer>

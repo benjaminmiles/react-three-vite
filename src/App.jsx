@@ -1,16 +1,18 @@
 import React, { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { Perf } from "r3f-perf";
+// import { Perf } from "r3f-perf";
 import Scene from "./Scene";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import Menu from "./components/Menu";
+import CameraController from "./components/CameraController";
 
 const App = () => {
   return (
     <div className='Main'>
-      <Canvas id='Canvas' dpr={[1, 2]} camera={{ fov: 60, position: [30, 22, 30], near: 0.1, far: 2000 }}>
+      <Canvas id='Canvas' dpr={[1, 2]} camera={{ fov: 45, position: [30, 22, 30], near: 0.1, far: 2000 }}>
         {/* <Perf deepAnalyze /> */}
+        <CameraController />
         <OrbitControls minDistance={5} maxDistance={980} zoomSpeed={0.2} dampingFactor={1.2} />
         <Suspense fallback={<div>Loading...</div>}>
           <Scene />

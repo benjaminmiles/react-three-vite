@@ -48,50 +48,39 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
 
   const { camera } = useThree();
   const cameraOffset = new THREE.Vector3(0, 5, -10); // Adjust as needed
-  const [rotationCount, setRotationCount] = useState(0);
+  // const [rotationCount, setRotationCount] = useState(0);
   const lastRotationRef = useRef(0);
-  const [rotationElapsedTime, setRotationElapsedTime] = useState(0);
+  // const [rotationElapsedTime, setRotationElapsedTime] = useState(0);
 
   useFrame((state, delta) => {
     // Adjust delta based on simulation speed
     const adjustedDelta = delta * simSpeed;
 
-    // Rotation Speed (radians per second)
-    // Earth rotates 360 degrees in 24 hours (86400 seconds)
-    const rotationSpeed = (2 * Math.PI) / (24 * 60 * 60); // Radians per second
-
-    // Orbital Speed (radians per simulation year)
-    // Assuming Earth's orbital period is 365.25 days
-    const orbitalSpeed = (2 * Math.PI) / (365.25 * 24 * 60 * 60); // Radians per second
-
-    // Update planet's rotation
-    if (rotationPeriod) {
-      localRef.current.rotation.y += rotationSpeed * adjustedDelta;
-    }
+    // Calculate each planet's orbital speed (radians per second)
+    // Orbital period is in Earth days, so convert it to seconds
+    const planetOrbitalSpeed = (2 * Math.PI) / (orbitalPeriod * 24 * 60 * 60);
 
     // Update planet's orbital position
-    localAngleRef.current += orbitalSpeed * adjustedDelta;
+    localAngleRef.current += planetOrbitalSpeed * adjustedDelta;
     const x = scaledOrbitalRadius * Math.cos(localAngleRef.current);
     const z = scaledOrbitalRadius * Math.sin(localAngleRef.current);
-    const currentRotation = localAngleRef.current * numberOfRotationsPerOrbit;
 
+    // Update the planet's position
     if (localRef.current) {
-      // Update the planet's position
       localRef.current.position.set(x, 0, z);
       updatePlanetPosition(name, { x, y: 0, z });
 
       // Increment the elapsed time by delta each frame
       setRotationElapsedTime(prev => prev + delta);
 
+      const currentRotation = localAngleRef.current * numberOfRotationsPerOrbit;
       const completedRotations = Math.floor(currentRotation / (2 * Math.PI));
       if (completedRotations > lastRotationRef.current) {
         lastRotationRef.current = completedRotations;
 
         // Compare simulation time with real rotation period
-        const realRotationPeriodHours = rotationPeriod; // real rotation period in hours
-        const simulationRotationTimeHours = rotationElapsedTime / 3600; // convert seconds to hours
-        console.log(`Simulation time for ${name} rotation: ${simulationRotationTimeHours.toFixed(2)} hours`);
-        console.log(`Real time for ${name} rotation: ${realRotationPeriodHours} hours`);
+        // const simulationRotationTimeSeconds = rotationElapsedTime;
+        // console.log(`Simulation time for ${name} rotation: ${simulationRotationTimeSeconds.toFixed(2)} seconds`);
 
         // Reset rotation elapsed time for next rotation
         setRotationElapsedTime(0);
@@ -99,6 +88,8 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
 
       // Planet rotation on its own axis
       if (rotationPeriod) {
+        let rotationSpeed = rotationPeriod ? (2 * Math.PI) / (rotationPeriod * 3600) : 0;
+        rotationSpeed *= rotationSpeedScaleFactor;
         // Increment the rotation based on rotation speed
         const rotationIncrement = rotationSpeed * delta;
         localRef.current.rotation.y += rotationIncrement;

@@ -10,13 +10,44 @@ const Menu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSpeedChange = e => {
-    const newSpeed = e.target.value ? Number(e.target.value) : 0;
-    setSimSpeed(newSpeed);
-  };
-
   const formatNumber = number => {
     return new Intl.NumberFormat("en-US", { maximumSignificantDigits: 3 }).format(number);
+  };
+
+  const handleSpeedChange = e => {
+    const speedOption = e.target.value;
+    let newSpeed;
+
+    switch (speedOption) {
+      case "realtime":
+        newSpeed = 1;
+        break;
+      case "1h":
+        newSpeed = 3600; // 1 hour = 3600 seconds
+        break;
+      case "1d":
+        newSpeed = 86400; // 1 day = 86400 seconds
+        break;
+      case "1w":
+        newSpeed = 604800; // 1 week = 7 * 86400 seconds
+        break;
+      case "1m":
+        newSpeed = 2629800; // Approx 1 month = 30.44 * 86400 seconds
+        break;
+      case "1y":
+        newSpeed = 31557600; // 1 year = 365.25 * 86400 seconds (accounting for leap years)
+        break;
+      case "5y":
+        newSpeed = 157788000; // 5 years
+        break;
+      case "10y":
+        newSpeed = 315576000; // 10 years
+        break;
+      default:
+        newSpeed = 1;
+    }
+
+    setSimSpeed(newSpeed);
   };
 
   return (
@@ -42,7 +73,16 @@ const Menu = () => {
         ) : (
           <div className='menu-item'>
             <label htmlFor='simSpeed'>Simulation Speed: </label>
-            <input id='simSpeed' type='number' min='0' max='400' step='0.1' value={simSpeed} onChange={handleSpeedChange} />
+            <select id='simSpeed' onChange={handleSpeedChange}>
+              <option value='realtime'>Realtime</option>
+              <option value='1h'>1s equals 1 hour</option>
+              <option value='1d'>1s equals 1 day</option>
+              <option value='1w'>1s equals 1 week</option>
+              <option value='1m'>1s equals 1 month</option>
+              <option value='1y'>1s equals 1 year</option>
+              <option value='5y'>1s equals 5 years</option>
+              <option value='10y'>1s equals 10 years</option>
+            </select>
           </div>
         )}
       </div>

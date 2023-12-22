@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import * as THREE from 'three';
 
 const useStore = create((set, get) => ({
-    simSpeed: 1,
+    simSpeed: 1, // 1 is realtime speed
     setSimSpeed: (newSpeed) => set({ simSpeed: newSpeed }),
 
     sunSettings: {

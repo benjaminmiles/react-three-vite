@@ -71,7 +71,7 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
       updatePlanetPosition(name, { x, y: 0, z });
 
       // Increment the elapsed time by delta each frame
-      setRotationElapsedTime(prev => prev + delta);
+      // setRotationElapsedTime(prev => prev + delta);
 
       const currentRotation = localAngleRef.current * numberOfRotationsPerOrbit;
       const completedRotations = Math.floor(currentRotation / (2 * Math.PI));
@@ -83,7 +83,7 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
         // console.log(`Simulation time for ${name} rotation: ${simulationRotationTimeSeconds.toFixed(2)} seconds`);
 
         // Reset rotation elapsed time for next rotation
-        setRotationElapsedTime(0);
+        // setRotationElapsedTime(0);
       }
 
       // Planet rotation on its own axis

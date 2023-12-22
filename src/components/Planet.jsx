@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef } from "react";
+import React, { useRef, forwardRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import OrbitPath from "./OrbitPath";
 import planetsData from "../data/planetsData";
@@ -48,23 +48,68 @@ const Planet = forwardRef(({ bodyData, textures }, ref) => {
 
   const { camera } = useThree();
   const cameraOffset = new THREE.Vector3(0, 5, -10); // Adjust as needed
+  const [rotationCount, setRotationCount] = useState(0);
+  const lastRotationRef = useRef(0);
+  const [rotationElapsedTime, setRotationElapsedTime] = useState(0);
 
   useFrame((state, delta) => {
-    localAngleRef.current += (delta * scaledOrbitalSpeed * simSpeed) / scaledOrbitalRadius;
-    updatePlanetAngle(name, localAngleRef.current);
+    // Adjust delta based on simulation speed
+    const adjustedDelta = delta * simSpeed;
 
-    // Calculate position from angle
+    // Rotation Speed (radians per second)
+    // Earth rotates 360 degrees in 24 hours (86400 seconds)
+    const rotationSpeed = (2 * Math.PI) / (24 * 60 * 60); // Radians per second
+
+    // Orbital Speed (radians per simulation year)
+    // Assuming Earth's orbital period is 365.25 days
+    const orbitalSpeed = (2 * Math.PI) / (365.25 * 24 * 60 * 60); // Radians per second
+
+    // Update planet's rotation
+    if (rotationPeriod) {
+      localRef.current.rotation.y += rotationSpeed * adjustedDelta;
+    }
+
+    // Update planet's orbital position
+    localAngleRef.current += orbitalSpeed * adjustedDelta;
     const x = scaledOrbitalRadius * Math.cos(localAngleRef.current);
     const z = scaledOrbitalRadius * Math.sin(localAngleRef.current);
+    const currentRotation = localAngleRef.current * numberOfRotationsPerOrbit;
 
     if (localRef.current) {
+      // Update the planet's position
       localRef.current.position.set(x, 0, z);
       updatePlanetPosition(name, { x, y: 0, z });
-    }
-    if (isPlanetSelected) {
-      const targetPosition = localRef.current.position.clone().add(cameraOffset);
-      camera.position.lerp(targetPosition, 0.1); // Smoothly move the camera to the target position
-      camera.lookAt(localRef.current.position); // Make the camera look at the planet
+
+      // Increment the elapsed time by delta each frame
+      setRotationElapsedTime(prev => prev + delta);
+
+      const completedRotations = Math.floor(currentRotation / (2 * Math.PI));
+      if (completedRotations > lastRotationRef.current) {
+        lastRotationRef.current = completedRotations;
+
+        // Compare simulation time with real rotation period
+        const realRotationPeriodHours = rotationPeriod; // real rotation period in hours
+        const simulationRotationTimeHours = rotationElapsedTime / 3600; // convert seconds to hours
+        console.log(`Simulation time for ${name} rotation: ${simulationRotationTimeHours.toFixed(2)} hours`);
+        console.log(`Real time for ${name} rotation: ${realRotationPeriodHours} hours`);
+
+        // Reset rotation elapsed time for next rotation
+        setRotationElapsedTime(0);
+      }
+
+      // Planet rotation on its own axis
+      if (rotationPeriod) {
+        // Increment the rotation based on rotation speed
+        const rotationIncrement = rotationSpeed * delta;
+        localRef.current.rotation.y += rotationIncrement;
+      }
+
+      // Camera logic for selected planet
+      if (isPlanetSelected) {
+        const targetPosition = localRef.current.position.clone().add(cameraOffset);
+        camera.position.lerp(targetPosition, 0.1);
+        camera.lookAt(localRef.current.position);
+      }
     }
   });
 

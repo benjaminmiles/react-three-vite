@@ -1,7 +1,7 @@
 {
   "name": "react-three-vite",
-  "version": "1.0.2",
-  "description": "A simple React Three Fiber + Vite starter with an import-ready CodeSandbox config.",
+  "version": "2.0.0",
+  "description": "A simple React Three Fiber + Vite starter.",
   "keywords": [
     "r3f",
     "react",
@@ -9,8 +9,7 @@
     "vite",
     "starter",
     "react three fiber",
-    "sandbox",
-    "codesandbox"
+    "sandbox"
   ],
   "author": "Benjamin Miles <talk@benjaminmiles.com> (https://github.com/benjaminmiles)",
   "repository": "github:benjaminmiles/react-three-vite",
@@ -28,7 +27,6 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "sandbox": "APP_ENV=sandbox vite",
     "build": "vite build",
     "preview": "vite preview"
   },
